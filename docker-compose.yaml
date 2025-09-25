@@ -1,1 +1,8 @@
-docker-compose.yaml
+version : "3.8"
+services:
+  phpcontainer:
+    image: php:8.2-apache
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html  
