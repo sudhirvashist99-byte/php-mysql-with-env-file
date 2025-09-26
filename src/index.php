@@ -9,7 +9,7 @@ CREATE TABLE users (
 );
 */
 // Database connection
-$host = "localhost";
+$host = "dbcontainer";
 $user = "root";
 $pass = "rootpass";
 $db   = "test_db";
