@@ -7,7 +7,7 @@ services:
     volumes:
       - ./src:/var/www/html 
     depends_on:
-      - db   
+      - phpmyadmincontainer   
   dbcontainer:
     image: mysql:8.0
     restart: always
@@ -27,8 +27,8 @@ services:
     ports:
       - "8081:80"
     environment:
-      PMA_HOST: db
+      PMA_HOST: phpmyadmincontainer
       MYSQL_ROOT_PASSWORD: rootpass
     depends_on:
-      - db
+      - phpmyadmincontainer
 
