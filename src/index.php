@@ -55,7 +55,7 @@ $result = $conn->query("SELECT * FROM users");
     </style>
 </head>
 <body>
-    <h2>CRUD Example (One Page)</h2>
+    <h2>PHP MySql CRUD Example (One Page)</h2>
 
     <!-- Add new record -->
     <form method="post">
