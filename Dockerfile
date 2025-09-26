@@ -1,4 +1,10 @@
 FROM php:8.2-apache
 
-# Install mysqli and pdo_mysql extensions
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+RUN apt-get update && apt-get install -y \
+        libpng-dev \
+        libjpeg-dev \
+        libfreetype6-dev \
+        libzip-dev \
+        zip \
+        unzip \
+        && docker-php-ext-install mysqli pdo pdo_mysql
