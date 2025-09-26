@@ -1,13 +1,17 @@
-version : "3.8"
+version: "3.8"
 services:
   phpcontainer:
-    image: php:8.2-apache
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php-crud-app
     ports:
       - "8080:80"
     volumes:
-      - ./src:/var/www/html 
+      - ./src:/var/www/html
     depends_on:
-      - dbcontainer   
+      - dbcontainer
+
   dbcontainer:
     image: mysql:8.0
     restart: always
@@ -17,10 +21,10 @@ services:
       MYSQL_USER: testuser
       MYSQL_PASSWORD: testpass
     volumes:
-      - ./db_data:/var/lib/mysql  
+      - ./db_data:/var/lib/mysql
     ports:
-        - "3306:3306"
-  
+      - "3306:3306"
+
   phpmyadmincontainer:
     image: phpmyadmin/phpmyadmin
     restart: always
@@ -31,4 +35,3 @@ services:
       MYSQL_ROOT_PASSWORD: rootpass
     depends_on:
       - dbcontainer
-
