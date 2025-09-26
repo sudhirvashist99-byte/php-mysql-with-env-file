@@ -1,10 +1,8 @@
 FROM php:8.2-apache
 
+# Install required dependencies for mysqli and pdo_mysql
 RUN apt-get update && apt-get install -y \
-        libpng-dev \
-        libjpeg-dev \
-        libfreetype6-dev \
-        libzip-dev \
-        zip \
-        unzip \
-        && docker-php-ext-install mysqli pdo pdo_mysql
+        default-mysql-client \
+        default-libmysqlclient-dev \
+        && docker-php-ext-install mysqli pdo_mysql \
+        && docker-php-ext-enable mysqli pdo_mysql
