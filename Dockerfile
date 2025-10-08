@@ -13,5 +13,13 @@ RUN a2enmod rewrite
 # Copy custom php.ini for production
 COPY php.ini /usr/local/etc/php/
 
+# Copy custom VirtualHost config
+COPY config/myapp.conf /etc/apache2/sites-available/000-default.conf
+
+# Enable rewrite module and site
+RUN a2enmod rewrite \
+ && a2ensite 000-default.conf
+
+
 # Start Apache in foreground
 CMD ["apache2-foreground"]
