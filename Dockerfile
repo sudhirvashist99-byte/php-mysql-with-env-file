@@ -17,8 +17,7 @@ COPY php.ini /usr/local/etc/php/
 COPY config/myapp.conf /etc/apache2/sites-available/000-default.conf
 
 # Enable rewrite module and site
-RUN a2enmod rewrite \
- && a2ensite 000-default.conf
+RUN a2ensite 000-default.conf
 
 
 # Start Apache in foreground
