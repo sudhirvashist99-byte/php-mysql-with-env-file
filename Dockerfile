@@ -11,3 +11,5 @@ RUN a2enmod rewrite
 
 # Copy custom php.ini for production
 COPY php.ini /usr/local/etc/php/
+# Start Apache in foreground
+CMD ["apache2-foreground"]
