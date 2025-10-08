@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image:phpapp: latest
     container_name: php-crud-app
     restart: always
     ports:
