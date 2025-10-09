@@ -1,0 +1,103 @@
+pipeline {
+    agent {label 'BhServer'}
+environment {
+    SSL_DIR = "${WORKSPACE}/nginx/ssl"
+    DOCKER_COMPOSE_DIR = "~/phpcicd"
+}
+    stages {
+        stage('Cleanup Old Docker Data') {
+            steps {
+                echo '🧹 Cleaning up old Docker containers, images, networks, and volumes...'
+                sh '''
+                    # Stop and remove all containers
+                    docker ps -aq | xargs -r docker stop
+                    docker ps -aq | xargs -r docker rm
+
+                    # Remove dangling images
+                    docker image prune -af
+
+                    # Remove all unused images, networks, and volumes
+                    docker system prune -af --volumes
+                '''
+                echo '✅ Docker cleanup complete.'
+            }
+        }
+        stage('Code Clone') {
+            steps {
+                git url:"https://github.com/sudhirvashist99-byte/php-mysql-app.git", branch:"main"
+                echo 'code clone from git successfully'
+            }
+        }
+        stages {
+        stage('Generate SSL Certificate') {
+            steps {
+                sh '''
+                mkdir -p ${SSL_DIR}
+                cd ${SSL_DIR}
+                echo "Generating self-signed certificate..."
+                openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+                    -keyout selfsigned.key \
+                    -out selfsigned.crt \
+                    -subj "/C=US/ST=None/L=None/O=Jenkins-CI/CN=$(hostname -I | awk '{print $1}')"
+                echo "Certificate generated successfully:"
+                ls -l ${SSL_DIR}
+                '''
+            }
+        }
+
+        stage('Copy Certificate to Nginx Path') {
+            steps {
+                sh '''
+                echo "Copying SSL certificate into Nginx directory..."
+                mkdir -p ${DOCKER_COMPOSE_DIR}/nginx/ssl
+                cp -f ${SSL_DIR}/selfsigned.key ${DOCKER_COMPOSE_DIR}/nginx/ssl/
+                cp -f ${SSL_DIR}/selfsigned.crt ${DOCKER_COMPOSE_DIR}/nginx/ssl/
+                '''
+            }
+        }
+
+        stage('Reload Nginx Container') {
+            steps {
+                sh '''
+                echo "Reloading Nginx container..."
+                cd ${DOCKER_COMPOSE_DIR}
+                docker compose exec nginx nginx -s reload || docker compose restart nginx
+                echo "Nginx reloaded successfully!"
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ SSL certificate created and Nginx reloaded successfully."
+        }
+        failure {
+            echo "❌ SSL certificate automation failed. Check logs."
+        }
+    }
+        
+        stage('Build') {
+            steps {
+                sh "docker compose build"
+                echo "docker build created successfully on remote sever"
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+        stage('Push Image to Docker') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh "docker compose -f docker-compose.yaml down && docker compose -f docker-compose.yaml up -d "
+                echo "first close old containner and docker Deploy successfully on remote sever"
+            }
+        }
+    }
+}
