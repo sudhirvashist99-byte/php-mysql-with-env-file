@@ -19,8 +19,8 @@ services:
     image: phpapp:latest
     container_name: php-crud-app
     restart: always
-    ports:
-      - "8080:80"
+    expose:
+      - "80"
     volumes:
       - ./src:/var/www/html
     env_file:
