@@ -1,4 +1,4 @@
-@Library('JenkinsSharedLibraries') _
+@Library('JenkinsSharedLibraries@main') _
 pipeline {
     agent { label 'BhServer' }
        stages {
