@@ -9,10 +9,10 @@ CREATE TABLE users (
 );
 */
 // Database connection
-$host = "dbcontainer";
-$user = "root";
-$pass = "rootpass";
-$db   = "test_db";
+$host = getenv('Host');
+$user = getenv('MYSQL_USER');
+$pass = getenv('MYSQL_PASSWORD');
+$db   = getenv('MYSQL_DATABASE');
 
 $conn = new mysqli($host, $user, $pass, $db);
 if ($conn->connect_error) {
